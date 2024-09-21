@@ -1,0 +1,14 @@
+Metadata-Version: 2.1
+Name: locomotion
+Version: 0.1.0
+Summary: Extension Template for Isaac Lab
+Home-page: https://github.com/isaac-sim/IsaacLabExtensionTemplate.git
+Author: Isaac Lab Project Developers
+Maintainer: Isaac Lab Project Developers
+License: MIT
+Keywords: extension,template,isaaclab
+Classifier: Natural Language :: English
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Isaac Sim :: 2023.1.1
+Classifier: Isaac Sim :: 4.0.0
+Requires-Python: >=3.10
