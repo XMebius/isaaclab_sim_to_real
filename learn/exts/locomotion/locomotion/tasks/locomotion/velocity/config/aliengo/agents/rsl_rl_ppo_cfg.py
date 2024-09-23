@@ -6,7 +6,6 @@ from omni.isaac.lab_tasks.utils.wrappers.rsl_rl import (
     RslRlPpoAlgorithmCfg,
 )
 
-
 @configclass
 class UnitreeAliengoRoughPPORunnerCfg(RslRlOnPolicyRunnerCfg):
     num_steps_per_env = 24

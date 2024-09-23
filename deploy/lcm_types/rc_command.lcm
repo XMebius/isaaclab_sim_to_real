@@ -1,0 +1,10 @@
+struct rc_command_lcmt
+{
+    int16_t mode;
+    float left_stick[2];
+    float right_stick[2];
+    int16_t R2;
+    int16_t R1;
+    int16_t L1;
+    int16_t L2;
+}

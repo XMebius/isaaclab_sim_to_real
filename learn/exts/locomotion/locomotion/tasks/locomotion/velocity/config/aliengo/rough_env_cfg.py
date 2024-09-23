@@ -6,13 +6,11 @@ from omni.isaac.lab.assets.articulation import ArticulationCfg
 from omni.isaac.lab.terrains import TerrainImporterCfg
 from omni.isaac.lab.terrains.config.rough import ROUGH_TERRAINS_CFG
 from omni.isaac.lab.utils.assets import ISAACLAB_NUCLEUS_DIR
-import os
-
-project_root_path = os.environ.get('PROJECT_ROOT_PATH')
+from learn import LEARN_ROOT_DIR
 
 UNITREE_Aliengo_CFG = ArticulationCfg(
     spawn=sim_utils.UsdFileCfg(
-        usd_path = f"{project_root_path}/resources/robots/aliengo/aliengo.usd",
+        usd_path = f"{LEARN_ROOT_DIR}/resources/robots/aliengo/aliengo.usd",
         activate_contact_sensors=True,
         rigid_props=sim_utils.RigidBodyPropertiesCfg(
             disable_gravity=False,
@@ -60,8 +58,6 @@ class AliengoRoughEnvCfg(LocomotionVelocityRoughEnvCfg):
         super().__post_init__()
         
         # cutomize the config
-
-
         self.scene.terrain = TerrainImporterCfg(
             prim_path="/World/ground",
             terrain_type="generator",
@@ -83,7 +79,7 @@ class AliengoRoughEnvCfg(LocomotionVelocityRoughEnvCfg):
         )
 
         self.scene.robot = UNITREE_Aliengo_CFG.replace(prim_path = "{ENV_REGEX_NS}/Robot")
-        self.scene.num_envs = 2048
+        self.scene.num_envs = 4096
         self.scene.height_scanner.prim_path = "{ENV_REGEX_NS}/Robot/trunk"
         # scale down the terrains because the robot is small
         self.scene.terrain.terrain_generator.sub_terrains["boxes"].grid_height_range = (0.025, 0.1)
