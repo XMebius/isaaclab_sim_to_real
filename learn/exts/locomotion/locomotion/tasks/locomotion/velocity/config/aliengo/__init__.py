@@ -1,8 +1,8 @@
 # register the environments and agent configurations for Aliengo
 
 import gymnasium as gym
-
 from . import agents, rough_env_cfg
+
 
 
 ##

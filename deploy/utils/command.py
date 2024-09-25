@@ -23,7 +23,10 @@ class NoneVelCommand():
         self.L1 = msg.L1
         self.L2 = msg.L2
 
-    def check_calibration(self) -> bool:
+    def pre_check_calibration(self) -> bool:
+        return self.R2_pressed
+    
+    def post_check_calibration(self) -> bool:
         return self.L2_pressed
 
     def change_passive(self) -> bool:

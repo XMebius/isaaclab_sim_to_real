@@ -8,14 +8,16 @@ class LCMBridge():
         self.command = command
         self.observer = observer
 
-    def send(self, action: aliengo_leg_cmd_lcmt) -> None:
+    def send(self, action) -> None:
+        # Add Kp and Kd to the action
         self.lc.publish("command_for_robot", self._action)
 
     def receive(self) -> None:
         self.lc.subscribe("body_state_data", self._body_state)
         self.lc.susbcribe("leg_state_data", self._leg_state)
         self.lc.subscribe("rc_command", self._rc_command)
-    
+        # TODO: camera data
+
     def _body_state(self, channel, data) -> None:
         msg = aliengo_body_data_lcmt.decode(data)
         self.observer.update_body_state(msg)
@@ -33,3 +35,5 @@ class LCMBridge():
     def _action(self, channel, data) -> None:
         msg = aliengo_leg_cmd_lcmt.decode(data)
         self.observer.update_action(msg)
+
+    

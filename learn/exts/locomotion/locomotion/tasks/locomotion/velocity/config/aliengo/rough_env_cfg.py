@@ -6,7 +6,9 @@ from omni.isaac.lab.assets.articulation import ArticulationCfg
 from omni.isaac.lab.terrains import TerrainImporterCfg
 from omni.isaac.lab.terrains.config.rough import ROUGH_TERRAINS_CFG
 from omni.isaac.lab.utils.assets import ISAACLAB_NUCLEUS_DIR
-from learn import LEARN_ROOT_DIR
+import os
+
+LEARN_ROOT_DIR = os.path.realpath(os.path.join(os.path.dirname(__file__), "../../../../../../../../../"))
 
 UNITREE_Aliengo_CFG = ArticulationCfg(
     spawn=sim_utils.UsdFileCfg(

@@ -1,5 +1,6 @@
 import numpy as np
 import math
+import re
 
 def get_rotation_matrix_from_rpy(rpy):
     """
@@ -31,15 +32,45 @@ def get_rotation_matrix_from_rpy(rpy):
 class Observer():
     def __init__(self, config) -> None:
         self.cfg = config
+
         self.obs_dict = dict()
         self.obs_terms = ['base_lin_vel', 'base_ang_vel', 'projected_gravity', 
                      'velocity_commands', 'joint_pos', 'joint_vel', 'actions',
                      'height_scan']
         self.obs_scale = [1, 1, 1, 1, 1, 1, 1, 1]
         self.obs_clip = [None, None, None, None, None, None, None, (-1.0, 1.0)]
+        
         self.euler = np.zeros(3)
         self.R = np.eye(3)
 
+        # get default leg state from config
+        self.init_joint_pos = self._set_init_joint_pos()
+        print("init_joint_pos:", self.init_joint_pos)
+
+    def _set_init_joint_pos(self):
+        # get init_pos as a dict
+        init_pos = self.cfg.scene.robot.init_state.joint_pos
+        
+        joint_names = [
+            'FL_hip_joint', 'FR_hip_joint', 'RL_hip_joint', 'RR_hip_joint',
+            'FL_thigh_joint', 'FR_thigh_joint', 'RL_thigh_joint', 'RR_thigh_joint',
+            'FL_calf_joint', 'FR_calf_joint', 'RL_calf_joint', 'RR_calf_joint'
+        ]
+
+        # match the joint names with the init_pos
+        init_pos_array = np.array([
+            next(value for pattern, value in init_pos.items() if re.match(pattern, name))
+            for name in joint_names
+        ])
+
+        return init_pos_array    
+    
+    def get_init_joint_pos(self):
+        return self.init_joint_pos
+    
+    def get_joint_pos(self):
+        return self.obs_dict[self.obs_terms[4]]
+    
     def update_body_state(self, msg):
         self.obs_dict[self.obs_terms[0]] = np.array(msg.vBody)
         self.obs_dict[self.obs_terms[1]] = np.array(msg.omegaBody)
@@ -65,6 +96,7 @@ class Observer():
         pass
 
     def get_observation(self):
+        # TODO: check info of the observation
         return self.compute()
 
     def compute(self):
