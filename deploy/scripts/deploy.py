@@ -12,7 +12,6 @@ import glob
 
 ROOT_DIR = os.path.realpath(os.path.join(os.path.dirname(__file__), "../../../"))
 
-# main
 if __name__ == "__main__":
 
     exp_name = "unitree_aliengo_rough"
@@ -28,4 +27,3 @@ if __name__ == "__main__":
     # create the runner
     runner = Runner(logdir, agent_cfg, env_cfg)
     runner.run()
-       

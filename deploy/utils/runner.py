@@ -118,15 +118,16 @@ class Runner():
      
     def calibrate(self, debug = True) -> None:
         # move the robot to the initial position and test passive state for safety
-        init_joint_pos = self.observer.get_init_joint_pos()
         self.lcm_bridge.receive()
+        init_joint_pos = self.observer.get_init_joint_pos()
         joint_pos = self.observer.get_joint_pos()
         target_joint_goal = np.zeros(12)
 
         print(f"About to calibrate, the robot will stand up [Press R2 to calibrate...]")
         while not self.ctrl_command.pre_check_calibration():
             time.sleep(0.1)
-        
+        self.ctrl_command.reset_R2_pressed()
+        print("Calibrating...")
         # discrete the target joint position
         joint_pos_seq = []
         joint_pos_offet = joint_pos - init_joint_pos
@@ -146,10 +147,6 @@ class Runner():
             # TODO: make the dog sit down
             pass
 
-    def recover(self) -> None:
-        # recover the robot to a safe state
-        pass
-    
     def run(self) -> None:
         # perform calibration before running
         self.calibrate()
@@ -157,7 +154,9 @@ class Runner():
         print("Make sure the robot has been calibrated. Press L2 to activate the controlling...")
         while not self.ctrl_command.post_check_calibration():
             time.sleep(0.1)
-        
+        self.ctrl_command.reset_L2_pressed()
+        print("Starting the robot...")
+
         # load inference model
         self.load_policy()
 
@@ -180,7 +179,7 @@ class Runner():
                     obs = self.observer.get_observation()
                     # perform inference TODO: check the info of action
                     action = self.policy(obs)
-                    # TODO: safety check
+                    # TODO: safety check, stop and reset the robot
                     
                     # send action to lcm bridge
                     self.lcm_bridge.send(action)

@@ -1,0 +1,608 @@
+--- git status ---
+On branch main
+Changes not staged for commit:
+  (use "git add/rm <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+	modified:   learn/exts/locomotion/locomotion/tasks/locomotion/velocity/config/aliengo/__pycache__/rough_env_cfg.cpython-310.pyc
+	modified:   learn/exts/locomotion/locomotion/tasks/locomotion/velocity/config/aliengo/agents/__pycache__/rsl_rl_ppo_cfg.cpython-310.pyc
+	modified:   learn/exts/locomotion/locomotion/tasks/locomotion/velocity/config/aliengo/agents/rsl_rl_ppo_cfg.py
+	modified:   learn/exts/locomotion/locomotion/tasks/locomotion/velocity/config/aliengo/rough_env_cfg.py
+	deleted:    learn/scripts/rename_template.py
+	deleted:    learn/scripts/rsl_rl/__pycache__/cli_args.cpython-310.pyc
+	deleted:    learn/scripts/rsl_rl/cli_args.py
+	deleted:    learn/scripts/rsl_rl/play.py
+	deleted:    learn/scripts/rsl_rl/train.py
+	modified:   resources/robots/aliengo/.asset_hash
+	modified:   resources/robots/aliengo/aliengo.usd
+	modified:   resources/robots/aliengo/config.yaml
+	modified:   resources/robots/aliengo/urdf/aliengo.urdf
+	deleted:    setup.sh
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+	deploy/
+	learn/__init__.py
+	learn/__pycache__/
+	learn/scripts/__pycache__/
+	learn/scripts/cli_args.py
+	learn/scripts/play.py
+	learn/scripts/train.py
+	logs/
+
+no changes added to commit (use "git add" and/or "git commit -a") 
+
+
+--- git diff ---
+diff --git a/learn/exts/locomotion/locomotion/tasks/locomotion/velocity/config/aliengo/__pycache__/rough_env_cfg.cpython-310.pyc b/learn/exts/locomotion/locomotion/tasks/locomotion/velocity/config/aliengo/__pycache__/rough_env_cfg.cpython-310.pyc
+index 7e41415..9921e5c 100644
+Binary files a/learn/exts/locomotion/locomotion/tasks/locomotion/velocity/config/aliengo/__pycache__/rough_env_cfg.cpython-310.pyc and b/learn/exts/locomotion/locomotion/tasks/locomotion/velocity/config/aliengo/__pycache__/rough_env_cfg.cpython-310.pyc differ
+diff --git a/learn/exts/locomotion/locomotion/tasks/locomotion/velocity/config/aliengo/agents/__pycache__/rsl_rl_ppo_cfg.cpython-310.pyc b/learn/exts/locomotion/locomotion/tasks/locomotion/velocity/config/aliengo/agents/__pycache__/rsl_rl_ppo_cfg.cpython-310.pyc
+index e55bb87..410e0c9 100644
+Binary files a/learn/exts/locomotion/locomotion/tasks/locomotion/velocity/config/aliengo/agents/__pycache__/rsl_rl_ppo_cfg.cpython-310.pyc and b/learn/exts/locomotion/locomotion/tasks/locomotion/velocity/config/aliengo/agents/__pycache__/rsl_rl_ppo_cfg.cpython-310.pyc differ
+diff --git a/learn/exts/locomotion/locomotion/tasks/locomotion/velocity/config/aliengo/agents/rsl_rl_ppo_cfg.py b/learn/exts/locomotion/locomotion/tasks/locomotion/velocity/config/aliengo/agents/rsl_rl_ppo_cfg.py
+index 11f2a34..3e948b2 100644
+--- a/learn/exts/locomotion/locomotion/tasks/locomotion/velocity/config/aliengo/agents/rsl_rl_ppo_cfg.py
++++ b/learn/exts/locomotion/locomotion/tasks/locomotion/velocity/config/aliengo/agents/rsl_rl_ppo_cfg.py
+@@ -6,7 +6,6 @@ from omni.isaac.lab_tasks.utils.wrappers.rsl_rl import (
+     RslRlPpoAlgorithmCfg,
+ )
+ 
+-
+ @configclass
+ class UnitreeAliengoRoughPPORunnerCfg(RslRlOnPolicyRunnerCfg):
+     num_steps_per_env = 24
+diff --git a/learn/exts/locomotion/locomotion/tasks/locomotion/velocity/config/aliengo/rough_env_cfg.py b/learn/exts/locomotion/locomotion/tasks/locomotion/velocity/config/aliengo/rough_env_cfg.py
+index b5b7e39..0396677 100644
+--- a/learn/exts/locomotion/locomotion/tasks/locomotion/velocity/config/aliengo/rough_env_cfg.py
++++ b/learn/exts/locomotion/locomotion/tasks/locomotion/velocity/config/aliengo/rough_env_cfg.py
+@@ -6,13 +6,11 @@ from omni.isaac.lab.assets.articulation import ArticulationCfg
+ from omni.isaac.lab.terrains import TerrainImporterCfg
+ from omni.isaac.lab.terrains.config.rough import ROUGH_TERRAINS_CFG
+ from omni.isaac.lab.utils.assets import ISAACLAB_NUCLEUS_DIR
+-import os
+-
+-project_root_path = os.environ.get('PROJECT_ROOT_PATH')
++from learn import LEARN_ROOT_DIR
+ 
+ UNITREE_Aliengo_CFG = ArticulationCfg(
+     spawn=sim_utils.UsdFileCfg(
+-        usd_path = f"{project_root_path}/resources/robots/aliengo/aliengo.usd",
++        usd_path = f"{LEARN_ROOT_DIR}/resources/robots/aliengo/aliengo.usd",
+         activate_contact_sensors=True,
+         rigid_props=sim_utils.RigidBodyPropertiesCfg(
+             disable_gravity=False,
+@@ -60,8 +58,6 @@ class AliengoRoughEnvCfg(LocomotionVelocityRoughEnvCfg):
+         super().__post_init__()
+         
+         # cutomize the config
+-
+-
+         self.scene.terrain = TerrainImporterCfg(
+             prim_path="/World/ground",
+             terrain_type="generator",
+@@ -83,7 +79,7 @@ class AliengoRoughEnvCfg(LocomotionVelocityRoughEnvCfg):
+         )
+ 
+         self.scene.robot = UNITREE_Aliengo_CFG.replace(prim_path = "{ENV_REGEX_NS}/Robot")
+-        self.scene.num_envs = 2048
++        self.scene.num_envs = 4096
+         self.scene.height_scanner.prim_path = "{ENV_REGEX_NS}/Robot/trunk"
+         # scale down the terrains because the robot is small
+         self.scene.terrain.terrain_generator.sub_terrains["boxes"].grid_height_range = (0.025, 0.1)
+diff --git a/learn/scripts/rename_template.py b/learn/scripts/rename_template.py
+deleted file mode 100644
+index c6255f9..0000000
+--- a/learn/scripts/rename_template.py
++++ /dev/null
+@@ -1,51 +0,0 @@
+-import os
+-import sys
+-from pathlib import Path
+-
+-"""This script can be used to rename the template project to a new project name.
+-It renames all the occurrences of locomotion (in files, directories, etc.) to the new project name.
+-"""
+-
+-
+-def rename_file_contents(root_dir_path: str, old_name: str, new_name: str, exclude_dirs: list = []):
+-    """Rename all instances of the old keyword to the new keyword in all files in the root directory.
+-
+-    Args:
+-        root_dir_path (str): The root directory path.
+-        old_name (str): The old keyword to replace.
+-        new_name (str): The new keyword to replace with.
+-    """
+-    for dirpath, _, files in os.walk(root_dir_path):
+-        if any(exclude_dir in dirpath for exclude_dir in exclude_dirs):
+-            continue
+-        for file_name in files:
+-            with open(os.path.join(dirpath, file_name)) as file:
+-                file_contents = file.read()
+-            file_contents = file_contents.replace(old_name, new_name)
+-            with open(os.path.join(dirpath, file_name), "w") as file:
+-                file.write(file_contents)
+-
+-
+-if __name__ == "__main__":
+-    if len(sys.argv) != 2:
+-        print("Usage: python rename_template.py <new_name>")
+-        sys.exit(1)
+-
+-    root_dir_path = str(Path(__file__).resolve().parent.parent)
+-    old_name = "locomotion"
+-    new_name = sys.argv[1]
+-
+-    print(f"Warning, this script will rename all instances of '{old_name}' to '{new_name}' in {root_dir_path}.")
+-    proceed = input("Proceed? (y/n): ")
+-
+-    if proceed.lower() == "y":
+-        # rename the locomotion folder
+-        os.rename(
+-            os.path.join(root_dir_path, "exts", "locomotion", "locomotion"),
+-            os.path.join(root_dir_path, "exts", "locomotion", new_name),
+-        )
+-        os.rename(os.path.join(root_dir_path, "exts", "locomotion"), os.path.join(root_dir_path, "exts", new_name))
+-        # rename the file contents
+-        rename_file_contents(root_dir_path, old_name, new_name, exclude_dirs=[".git"])
+-    else:
+-        print("Aborting.")
+diff --git a/learn/scripts/rsl_rl/__pycache__/cli_args.cpython-310.pyc b/learn/scripts/rsl_rl/__pycache__/cli_args.cpython-310.pyc
+deleted file mode 100644
+index 4a674b6..0000000
+Binary files a/learn/scripts/rsl_rl/__pycache__/cli_args.cpython-310.pyc and /dev/null differ
+diff --git a/learn/scripts/rsl_rl/cli_args.py b/learn/scripts/rsl_rl/cli_args.py
+deleted file mode 100644
+index ea91c7a..0000000
+--- a/learn/scripts/rsl_rl/cli_args.py
++++ /dev/null
+@@ -1,69 +0,0 @@
+-from __future__ import annotations
+-
+-import argparse
+-from typing import TYPE_CHECKING
+-
+-if TYPE_CHECKING:
+-    from omni.isaac.lab_tasks.utils.wrappers.rsl_rl import RslRlOnPolicyRunnerCfg
+-
+-
+-def add_rsl_rl_args(parser: argparse.ArgumentParser):
+-    """Add RSL-RL arguments to the parser.
+-
+-    Args:
+-        parser: The parser to add the arguments to.
+-    """
+-    # create a new argument group
+-    arg_group = parser.add_argument_group("rsl_rl", description="Arguments for RSL-RL agent.")
+-    # -- experiment arguments
+-    arg_group.add_argument(
+-        "--experiment_name", type=str, default=None, help="Name of the experiment folder where logs will be stored."
+-    )
+-    arg_group.add_argument("--run_name", type=str, default=None, help="Run name suffix to the log directory.")
+-    # -- load arguments
+-    arg_group.add_argument("--resume", type=bool, default=None, help="Whether to resume from a checkpoint.")
+-    arg_group.add_argument("--load_run", type=str, default=None, help="Name of the run folder to resume from.")
+-    arg_group.add_argument("--checkpoint", type=str, default=None, help="Checkpoint file to resume from.")
+-    # -- logger arguments
+-    arg_group.add_argument(
+-        "--logger", type=str, default=None, choices={"wandb", "tensorboard", "neptune"}, help="Logger module to use."
+-    )
+-    arg_group.add_argument(
+-        "--log_project_name", type=str, default=None, help="Name of the logging project when using wandb or neptune."
+-    )
+-
+-
+-def parse_rsl_rl_cfg(task_name: str, args_cli: argparse.Namespace) -> RslRlOnPolicyRunnerCfg:
+-    """Parse configuration for RSL-RL agent based on inputs.
+-
+-    Args:
+-        task_name: The name of the environment.
+-        args_cli: The command line arguments.
+-
+-    Returns:
+-        The parsed configuration for RSL-RL agent based on inputs.
+-    """
+-    from omni.isaac.lab_tasks.utils.parse_cfg import load_cfg_from_registry
+-
+-    # load the default configuration
+-    rslrl_cfg: RslRlOnPolicyRunnerCfg = load_cfg_from_registry(task_name, "rsl_rl_cfg_entry_point")
+-
+-    # override the default configuration with CLI arguments
+-    if args_cli.seed is not None:
+-        rslrl_cfg.seed = args_cli.seed
+-    if args_cli.resume is not None:
+-        rslrl_cfg.resume = args_cli.resume
+-    if args_cli.load_run is not None:
+-        rslrl_cfg.load_run = args_cli.load_run
+-    if args_cli.checkpoint is not None:
+-        rslrl_cfg.load_checkpoint = args_cli.checkpoint
+-    if args_cli.run_name is not None:
+-        rslrl_cfg.run_name = args_cli.run_name
+-    if args_cli.logger is not None:
+-        rslrl_cfg.logger = args_cli.logger
+-    # set the project name for wandb and neptune
+-    if rslrl_cfg.logger in {"wandb", "neptune"} and args_cli.log_project_name:
+-        rslrl_cfg.wandb_project = args_cli.log_project_name
+-        rslrl_cfg.neptune_project = args_cli.log_project_name
+-
+-    return rslrl_cfg
+diff --git a/learn/scripts/rsl_rl/play.py b/learn/scripts/rsl_rl/play.py
+deleted file mode 100644
+index 57454a2..0000000
+--- a/learn/scripts/rsl_rl/play.py
++++ /dev/null
+@@ -1,121 +0,0 @@
+-"""Script to play a checkpoint if an RL agent from RSL-RL."""
+-
+-"""Launch Isaac Sim Simulator first."""
+-
+-import argparse
+-
+-from omni.isaac.lab.app import AppLauncher
+-
+-# local imports
+-import cli_args  # isort: skip
+-
+-# add argparse arguments
+-parser = argparse.ArgumentParser(description="Train an RL agent with RSL-RL.")
+-parser.add_argument("--video", action="store_true", default=False, help="Record videos during training.")
+-parser.add_argument("--video_length", type=int, default=200, help="Length of the recorded video (in steps).")
+-parser.add_argument(
+-    "--disable_fabric", action="store_true", default=False, help="Disable fabric and use USD I/O operations."
+-)
+-parser.add_argument("--num_envs", type=int, default=None, help="Number of environments to simulate.")
+-parser.add_argument("--task", type=str, default=None, help="Name of the task.")
+-parser.add_argument("--seed", type=int, default=None, help="Seed used for the environment")
+-# append RSL-RL cli arguments
+-cli_args.add_rsl_rl_args(parser)
+-# append AppLauncher cli args
+-AppLauncher.add_app_launcher_args(parser)
+-args_cli = parser.parse_args()
+-# always enable cameras to record video
+-if args_cli.video:
+-    args_cli.enable_cameras = True
+-
+-# launch omniverse app
+-app_launcher = AppLauncher(args_cli)
+-simulation_app = app_launcher.app
+-
+-"""Rest everything follows."""
+-
+-
+-import gymnasium as gym
+-import os
+-import torch
+-
+-from rsl_rl.runners import OnPolicyRunner
+-
+-# Import extensions to set up environment tasks
+-import locomotion.tasks  # noqa: F401
+-
+-from omni.isaac.lab.utils.dict import print_dict
+-from omni.isaac.lab_tasks.utils import get_checkpoint_path, parse_env_cfg
+-from omni.isaac.lab_tasks.utils.wrappers.rsl_rl import RslRlOnPolicyRunnerCfg, RslRlVecEnvWrapper, export_policy_as_onnx
+-
+-
+-def main():
+-    """Play with RSL-RL agent."""
+-    # parse configuration
+-    env_cfg = parse_env_cfg(
+-        args_cli.task, device=args_cli.device, num_envs=args_cli.num_envs, use_fabric=not args_cli.disable_fabric
+-    )
+-    agent_cfg: RslRlOnPolicyRunnerCfg = cli_args.parse_rsl_rl_cfg(args_cli.task, args_cli)
+-
+-    # specify directory for logging experiments
+-    log_root_path = os.path.join("logs", "rsl_rl", agent_cfg.experiment_name)
+-    log_root_path = os.path.abspath(log_root_path)
+-    print(f"[INFO] Loading experiment from directory: {log_root_path}")
+-    resume_path = get_checkpoint_path(log_root_path, agent_cfg.load_run, agent_cfg.load_checkpoint)
+-    log_dir = os.path.dirname(resume_path)
+-
+-    # create isaac environment
+-    env = gym.make(args_cli.task, cfg=env_cfg, render_mode="rgb_array" if args_cli.video else None)
+-    # wrap for video recording
+-    if args_cli.video:
+-        video_kwargs = {
+-            "video_folder": os.path.join(log_dir, "videos", "play"),
+-            "step_trigger": lambda step: step == 0,
+-            "video_length": args_cli.video_length,
+-            "disable_logger": True,
+-        }
+-        print("[INFO] Recording videos during training.")
+-        print_dict(video_kwargs, nesting=4)
+-        env = gym.wrappers.RecordVideo(env, **video_kwargs)
+-    # wrap around environment for rsl-rl
+-    env = RslRlVecEnvWrapper(env)
+-
+-    print(f"[INFO]: Loading model checkpoint from: {resume_path}")
+-
+-    # load previously trained model
+-    ppo_runner = OnPolicyRunner(env, agent_cfg.to_dict(), log_dir=None, device=agent_cfg.device)
+-    ppo_runner.load(resume_path)
+-
+-    # obtain the trained policy for inference
+-    policy = ppo_runner.get_inference_policy(device=env.unwrapped.device)
+-
+-    # export policy to onnx
+-    export_model_dir = os.path.join(os.path.dirname(resume_path), "exported")
+-    export_policy_as_onnx(ppo_runner.alg.actor_critic, export_model_dir, filename="policy.onnx")
+-
+-    # reset environment
+-    obs, _ = env.get_observations()
+-    timestep = 0
+-    # simulate environment
+-    while simulation_app.is_running():
+-        # run everything in inference mode
+-        with torch.inference_mode():
+-            # agent stepping
+-            actions = policy(obs)
+-            # env stepping
+-            obs, _, _, _ = env.step(actions)
+-        if args_cli.video:
+-            timestep += 1
+-            # Exit the play loop after recording one video
+-            if timestep == args_cli.video_length:
+-                break
+-
+-    # close the simulator
+-    env.close()
+-
+-
+-if __name__ == "__main__":
+-    # run the main execution
+-    main()
+-    # close sim app
+-    simulation_app.close()
+diff --git a/learn/scripts/rsl_rl/train.py b/learn/scripts/rsl_rl/train.py
+deleted file mode 100644
+index 5ad6f3e..0000000
+--- a/learn/scripts/rsl_rl/train.py
++++ /dev/null
+@@ -1,131 +0,0 @@
+-"""Script to train RL agent with RSL-RL."""
+-
+-"""Launch Isaac Sim Simulator first."""
+-
+-import argparse
+-
+-from omni.isaac.lab.app import AppLauncher
+-
+-# local imports
+-import cli_args  # isort: skip
+-
+-# add argparse arguments
+-parser = argparse.ArgumentParser(description="Train an RL agent with RSL-RL.")
+-parser.add_argument("--video", action="store_true", default=False, help="Record videos during training.")
+-parser.add_argument("--video_length", type=int, default=200, help="Length of the recorded video (in steps).")
+-parser.add_argument("--video_interval", type=int, default=2000, help="Interval between video recordings (in steps).")
+-parser.add_argument(
+-    "--disable_fabric", action="store_true", default=False, help="Disable fabric and use USD I/O operations."
+-)
+-parser.add_argument("--num_envs", type=int, default=None, help="Number of environments to simulate.")
+-parser.add_argument("--task", type=str, default=None, help="Name of the task.")
+-parser.add_argument("--seed", type=int, default=None, help="Seed used for the environment")
+-parser.add_argument("--max_iterations", type=int, default=None, help="RL Policy training iterations.")
+-# append RSL-RL cli arguments
+-cli_args.add_rsl_rl_args(parser)
+-# append AppLauncher cli args
+-AppLauncher.add_app_launcher_args(parser)
+-args_cli = parser.parse_args()
+-# always enable cameras to record video
+-if args_cli.video:
+-    args_cli.enable_cameras = True
+-
+-# launch omniverse app
+-app_launcher = AppLauncher(args_cli)
+-simulation_app = app_launcher.app
+-
+-"""Rest everything follows."""
+-
+-import gymnasium as gym
+-import os
+-import torch
+-from datetime import datetime
+-
+-from rsl_rl.runners import OnPolicyRunner
+-
+-# Import extensions to set up environment tasks
+-import locomotion.tasks  # noqa: F401
+-
+-from omni.isaac.lab.envs import ManagerBasedRLEnvCfg
+-from omni.isaac.lab.utils.dict import print_dict
+-from omni.isaac.lab.utils.io import dump_pickle, dump_yaml
+-from omni.isaac.lab_tasks.utils import get_checkpoint_path, parse_env_cfg
+-from omni.isaac.lab_tasks.utils.wrappers.rsl_rl import RslRlOnPolicyRunnerCfg, RslRlVecEnvWrapper
+-
+-torch.backends.cuda.matmul.allow_tf32 = True
+-torch.backends.cudnn.allow_tf32 = True
+-torch.backends.cudnn.deterministic = False
+-torch.backends.cudnn.benchmark = False
+-
+-
+-def main():
+-    """Train with RSL-RL agent."""
+-    # parse configuration
+-    env_cfg: ManagerBasedRLEnvCfg = parse_env_cfg(
+-        args_cli.task, device=args_cli.device, num_envs=args_cli.num_envs, use_fabric=not args_cli.disable_fabric
+-    )
+-    agent_cfg: RslRlOnPolicyRunnerCfg = cli_args.parse_rsl_rl_cfg(args_cli.task, args_cli)
+-
+-    # specify directory for logging experiments
+-    log_root_path = os.path.join("logs", "rsl_rl", agent_cfg.experiment_name)
+-    log_root_path = os.path.abspath(log_root_path)
+-    print(f"[INFO] Logging experiment in directory: {log_root_path}")
+-    # specify directory for logging runs: {time-stamp}_{run_name}
+-    log_dir = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+-    if agent_cfg.run_name:
+-        log_dir += f"_{agent_cfg.run_name}"
+-    log_dir = os.path.join(log_root_path, log_dir)
+-
+-    # max iterations for training
+-    if args_cli.max_iterations:
+-        agent_cfg.max_iterations = args_cli.max_iterations
+-
+-    # create isaac environment
+-    env = gym.make(args_cli.task, cfg=env_cfg, render_mode="rgb_array" if args_cli.video else None)
+-    # wrap for video recording
+-    if args_cli.video:
+-        video_kwargs = {
+-            "video_folder": os.path.join(log_dir, "videos", "train"),
+-            "step_trigger": lambda step: step % args_cli.video_interval == 0,
+-            "video_length": args_cli.video_length,
+-            "disable_logger": True,
+-        }
+-        print("[INFO] Recording videos during training.")
+-        print_dict(video_kwargs, nesting=4)
+-        env = gym.wrappers.RecordVideo(env, **video_kwargs)
+-    # wrap around environment for rsl-rl
+-    env = RslRlVecEnvWrapper(env)
+-
+-    # create runner from rsl-rl
+-    runner = OnPolicyRunner(env, agent_cfg.to_dict(), log_dir=log_dir, device=agent_cfg.device)
+-    # write git state to logs
+-    runner.add_git_repo_to_log(__file__)
+-    # save resume path before creating a new log_dir
+-    if agent_cfg.resume:
+-        # get path to previous checkpoint
+-        resume_path = get_checkpoint_path(log_root_path, agent_cfg.load_run, agent_cfg.load_checkpoint)
+-        print(f"[INFO]: Loading model checkpoint from: {resume_path}")
+-        # load previously trained model
+-        runner.load(resume_path)
+-
+-    # set seed of the environment
+-    env.seed(agent_cfg.seed)
+-
+-    # dump the configuration into log-directory
+-    dump_yaml(os.path.join(log_dir, "params", "env.yaml"), env_cfg)
+-    dump_yaml(os.path.join(log_dir, "params", "agent.yaml"), agent_cfg)
+-    dump_pickle(os.path.join(log_dir, "params", "env.pkl"), env_cfg)
+-    dump_pickle(os.path.join(log_dir, "params", "agent.pkl"), agent_cfg)
+-
+-    # run training
+-    runner.learn(num_learning_iterations=agent_cfg.max_iterations, init_at_random_ep_len=True)
+-
+-    # close the simulator
+-    env.close()
+-
+-
+-if __name__ == "__main__":
+-    # run the main execution
+-    main()
+-    # close sim app
+-    simulation_app.close()
+diff --git a/resources/robots/aliengo/.asset_hash b/resources/robots/aliengo/.asset_hash
+index e0cc9d3..7e48ef6 100644
+--- a/resources/robots/aliengo/.asset_hash
++++ b/resources/robots/aliengo/.asset_hash
+@@ -1 +1 @@
+-ac29a35d4ac57c3afffacb44e52a7594
+\ No newline at end of file
++7dfec27538b2475856f00727bc6d55e2
+\ No newline at end of file
+diff --git a/resources/robots/aliengo/aliengo.usd b/resources/robots/aliengo/aliengo.usd
+index 4126a10..dc2c2c4 100644
+Binary files a/resources/robots/aliengo/aliengo.usd and b/resources/robots/aliengo/aliengo.usd differ
+diff --git a/resources/robots/aliengo/config.yaml b/resources/robots/aliengo/config.yaml
+index 7344f13..4a3b084 100644
+--- a/resources/robots/aliengo/config.yaml
++++ b/resources/robots/aliengo/config.yaml
+@@ -14,5 +14,5 @@ default_drive_damping: 0.0
+ link_density: 0.0
+ convex_decompose_mesh: false
+ ##
+-# Generated by UrdfConverter on 2024-09-21 at 15:20:54.
++# Generated by UrdfConverter on 2024-09-23 at 15:50:01.
+ ##
+diff --git a/resources/robots/aliengo/urdf/aliengo.urdf b/resources/robots/aliengo/urdf/aliengo.urdf
+index 7011bf0..bac539d 100644
+--- a/resources/robots/aliengo/urdf/aliengo.urdf
++++ b/resources/robots/aliengo/urdf/aliengo.urdf
+@@ -309,7 +309,7 @@
+       <geometry>
+         <mesh filename="../meshes/trunk.dae" scale="1 1 1"/>
+       </geometry>
+-      <material name="grey"/>
++      <material name="black"/>
+     </visual>
+     <collision>
+       <origin rpy="0 0 0" xyz="0 0 0"/>
+@@ -373,7 +373,7 @@
+       <geometry>
+         <mesh filename="../meshes/hip.dae" scale="1 1 1"/>
+       </geometry>
+-      <material name="silver"/>
++      <material name="brown"/>
+     </visual>
+     <collision>
+       <origin rpy="1.5707963267948966 0 0" xyz="0 -0.083 0"/>
+@@ -426,7 +426,7 @@
+       <geometry>
+         <mesh filename="../meshes/thigh_mirror.dae" scale="1 1 1"/>
+       </geometry>
+-      <material name="silver"/>
++      <material name="brown"/>
+     </visual>
+     <collision>
+       <origin rpy="0 1.5707963267948966 0" xyz="0 0 -0.125"/>
+@@ -586,7 +586,7 @@
+       <geometry>
+         <mesh filename="../meshes/hip.dae" scale="1 1 1"/>
+       </geometry>
+-      <material name="silver"/>
++      <material name="brown"/>
+     </visual>
+     <collision>
+       <origin rpy="1.5707963267948966 0 0" xyz="0 0.083 0"/>
+@@ -639,7 +639,7 @@
+       <geometry>
+         <mesh filename="../meshes/thigh.dae" scale="1 1 1"/>
+       </geometry>
+-      <material name="silver"/>
++      <material name="brown"/>
+     </visual>
+     <collision>
+       <origin rpy="0 1.5707963267948966 0" xyz="0 0 -0.125"/>
+@@ -799,7 +799,7 @@
+       <geometry>
+         <mesh filename="../meshes/hip.dae" scale="1 1 1"/>
+       </geometry>
+-      <material name="silver"/>
++      <material name="brown"/>
+     </visual>
+     <collision>
+       <origin rpy="1.5707963267948966 0 0" xyz="0 -0.083 0"/>
+@@ -852,7 +852,7 @@
+       <geometry>
+         <mesh filename="../meshes/thigh_mirror.dae" scale="1 1 1"/>
+       </geometry>
+-      <material name="silver"/>
++      <material name="brown"/>
+     </visual>
+     <collision>
+       <origin rpy="0 1.5707963267948966 0" xyz="0 0 -0.125"/>
+@@ -1012,7 +1012,7 @@
+       <geometry>
+         <mesh filename="../meshes/hip.dae" scale="1 1 1"/>
+       </geometry>
+-      <material name="silver"/>
++      <material name="brown"/>
+     </visual>
+     <collision>
+       <origin rpy="1.5707963267948966 0 0" xyz="0 0.083 0"/>
+@@ -1065,7 +1065,7 @@
+       <geometry>
+         <mesh filename="../meshes/thigh.dae" scale="1 1 1"/>
+       </geometry>
+-      <material name="silver"/>
++      <material name="brown"/>
+     </visual>
+     <collision>
+       <origin rpy="0 1.5707963267948966 0" xyz="0 0 -0.125"/>
+diff --git a/setup.sh b/setup.sh
+deleted file mode 100644
+index b3a9775..0000000
+--- a/setup.sh
++++ /dev/null
+@@ -1,2 +0,0 @@
+-# get current path
+-export PROJECT_ROOT_PATH=$(pwd)
+\ No newline at end of file

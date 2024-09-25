@@ -1,2 +1,3 @@
 .vscode/
-runs/
+runs/**/model_*.pt
+!runs/**/model_1499.pt
