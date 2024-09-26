@@ -1,3 +1,6 @@
 .vscode/
 runs/**/model_*.pt
 !runs/**/model_1499.pt
+SimToReal.egg-info/
+dist/
+build/
