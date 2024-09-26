@@ -7,5 +7,5 @@ setup(
     author='Yixuan Chen',
     packages=find_packages(),
     author_email='2152824@tongji.edu.cn',
-    description='Toolkit for deployment of SimToReal on the Unitree Aliengo.'
+    description='Toolkit for learning and deployment of SimToReal on the Unitree Aliengo.'
 )

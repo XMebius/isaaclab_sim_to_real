@@ -30,8 +30,8 @@ def get_rotation_matrix_from_rpy(rpy):
     return rot
 
 class Observer():
-    def __init__(self, env_cfg) -> None:
-        self.env_cfg = env_cfg
+    def __init__(self, config) -> None:
+        self.cfg = config
 
         self.obs_dict = dict()
         self.obs_terms = ['base_lin_vel', 'base_ang_vel', 'projected_gravity', 
@@ -49,7 +49,7 @@ class Observer():
 
     def _set_init_joint_pos(self):
         # get init_pos as a dict
-        init_pos = self.env_cfg["scene"]["robot"]["init_state"]["joint_pos"]
+        init_pos = self.cfg.scene.robot.init_state.joint_pos
         
         joint_names = [
             'FL_hip_joint', 'FR_hip_joint', 'RL_hip_joint', 'RR_hip_joint',
@@ -65,7 +65,6 @@ class Observer():
 
         # num_envs: 1
         init_pos_array = np.expand_dims(init_pos_array, axis=0)
-        print("init_pos_array.shape: {}, init_pos_array: {}".format(init_pos_array.shape, init_pos_array))
 
         return init_pos_array    
     
@@ -73,7 +72,6 @@ class Observer():
         return self.init_joint_pos
     
     def get_joint_pos(self):
-        # TODO: reverse the joint order to match the order in the observation
         return self.obs_dict[self.obs_terms[4]]
     
     def update_body_state(self, msg):

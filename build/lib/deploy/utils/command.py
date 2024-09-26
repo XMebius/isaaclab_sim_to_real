@@ -1,5 +1,5 @@
 class NoneVelCommand():
-    def __init__(self):
+    def __init__(self, command):
 
         self.R1_pressed = False
         self.R1 = None

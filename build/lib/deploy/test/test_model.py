@@ -7,8 +7,7 @@ simulation_app = app_launcher.app
 """Load the necessary modules."""
 from omni.isaac.lab.utils.io import load_pickle
 # from deploy.utils.command import NoneVelCommand
-from deploy.utils.runner import Runner
-# from deploy.lcm_types.aliengo_body_data_lcmt import aliengo_body_data_lcmt
+from deploy.lcm_types.aliengo_body_data_lcmt import aliengo_body_data_lcmt
 from rsl_rl.modules import ActorCritic, ActorCriticRecurrent, EmpiricalNormalization
 from rsl_rl.algorithms import PPO
 import torch

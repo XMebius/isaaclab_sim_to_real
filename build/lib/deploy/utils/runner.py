@@ -54,7 +54,7 @@ class Runner():
         self.current_step = 0 
 
     def load_policy(self, load_optimizer = True) -> None:
-        model_path = os.path.join(self.logdir, f"model_{self.agent_cfg['max_iterations'] - 1}.pt")
+        model_path = os.path.join(self.logdir, f"model_{self.agent_cfg["max_iterations"] - 1}.pt")
         if not os.path.isfile(model_path):
             raise FileNotFoundError(f"Model file {model_path} not found.")
             
