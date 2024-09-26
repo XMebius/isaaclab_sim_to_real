@@ -8,17 +8,10 @@ SHELL ["/bin/bash", "-c"]
 
 # Envs
 ENV ACCEPT_EULA=Y
-
-ARG ISAACSIM_ROOT_PATH_ARG
-ENV ISAACSIM_ROOT_PATH=${ISAACSIM_ROOT_PATH_ARG}
-# Path to the Isaac Lab directory
-ARG ISAACLAB_PATH_ARG
-ENV ISAACLAB_PATH=${ISAACLAB_PATH_ARG}
-# Home dir of docker user, typically '/root'
-ARG DOCKER_USER_HOME_ARG
-ENV DOCKER_USER_HOME=${DOCKER_USER_HOME_ARG}
-
+ENV ISAACSIM_ROOT_PATH=/isaac-sim
+ENV ISAACLAB_PATH=/workspace/isaaclab
 ENV SIMTOREAL_PATH=/workspace/sim_to_real
+ENV DOCKER_USER_HOME=/root
 ENV LANG=C.UTF-8
 # in case get interupted
 ENV DEBIAN_FRONTEND=noninteractive  
@@ -31,6 +24,7 @@ RUN --mount=type=cache,target=/var/cache/apt \
     build-essential \
     cmake \
     git \
+    vim \
     libglib2.0-0 \
     libglib2.0-dev \
     ncurses-term \
@@ -41,34 +35,6 @@ RUN --mount=type=cache,target=/var/cache/apt \
     unzip && \
     apt -y autoremove && apt clean autoclean && \
     rm -rf /var/lib/apt/lists/*
-
-    # sim_to_real repo
-ARG SIMTOREAL_REPO_URL=https://github.com/XMebius/isaaclab_sim_to_real.git
-RUN git clone ${SIMTOREAL_REPO_URL} ${SIMTOREAL_PATH}
-RUN cd ${SIMTOREAL_PATH} && \
-    pip install -e .
-
-# LCM
-ARG LCM_ROOT_PATH=/workspace/
-RUN cd ${LCM_ROOT_PATH} && \
-    wget -c -O lcm.zip https://github.com/lcm-proj/lcm/archive/refs/tags/v1.5.0.zip && \
-    unzip lcm.zip && \
-    rm lcm.zip
-
-# Build and install LCM core
-RUN mkdir ${LCM_ROOT_PATH}/lcm-1.5.0/build && \
-    cd ${LCM_ROOT_PATH}/lcm-1.5.0/build && \
-    cmake .. && \
-    make && \
-    make install && \
-    ldconfig
-
-# Install the Python bindings
-RUN cd ${LCM_ROOT_PATH}/lcm-1.5.0/lcm-python && \
-python3 setup.py install
-
-# Clean up the working directory
-RUN rm -rf ${LCM_ROOT_PATH}/lcm-1.5.0
 
 # clone Isaac Lab repo
 ARG ISAACLAB_REPO_URL=https://github.com/isaac-sim/IsaacLab.git
@@ -117,4 +83,37 @@ RUN echo "export ISAACLAB_PATH=${ISAACLAB_PATH}" >> ${HOME}/.bashrc && \
     echo "alias tensorboard='${ISAACLAB_PATH}/_isaac_sim/python.sh ${ISAACLAB_PATH}/_isaac_sim/tensorboard'" >> ${HOME}/.bashrc && \
     echo "export TZ=$(date +%Z)" >> ${HOME}/.bashrc
 
+
+# sim_to_real repo
+ARG SIMTOREAL_REPO_URL=https://github.com/XMebius/isaaclab_sim_to_real.git
+
+RUN git clone ${SIMTOREAL_REPO_URL} ${SIMTOREAL_PATH} && \
+    cd ${SIMTOREAL_PATH} && \
+    pip install -e . && \
+    pip install toml && \
+    cd ${SIMTOREAL_PATH}/learn/exts/locomotion && \
+    pip install -e .
+
+# LCM
+ARG LCM_ROOT_PATH=/workspace/
+RUN cd ${LCM_ROOT_PATH} && \
+    wget -c -O lcm.zip https://github.com/lcm-proj/lcm/archive/refs/tags/v1.5.0.zip && \
+    unzip lcm.zip && \
+    rm lcm.zip
+
+# Build and install LCM core
+RUN mkdir ${LCM_ROOT_PATH}/lcm-1.5.0/build && \
+    cd ${LCM_ROOT_PATH}/lcm-1.5.0/build && \
+    cmake .. && \
+    make && \
+    make install && \
+    ldconfig && \
+    cd ${LCM_ROOT_PATH}/lcm-1.5.0/lcm-python && \
+    python3 setup.py install && \
+    rm -rf ${LCM_ROOT_PATH}/lcm-1.5.0
+
+
 WORKDIR ${SIMTOREAL_PATH}
+
+ENTRYPOINT []
+CMD ["/bin/bash"]
