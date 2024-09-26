@@ -8,10 +8,17 @@ SHELL ["/bin/bash", "-c"]
 
 # Envs
 ENV ACCEPT_EULA=Y
-ENV ISAACSIM_ROOT_PATH=/isaac-sim
-ENV ISAACLAB_PATH=/workspace/isaaclab
+
+ARG ISAACSIM_ROOT_PATH_ARG
+ENV ISAACSIM_ROOT_PATH=${ISAACSIM_ROOT_PATH_ARG}
+# Path to the Isaac Lab directory
+ARG ISAACLAB_PATH_ARG
+ENV ISAACLAB_PATH=${ISAACLAB_PATH_ARG}
+# Home dir of docker user, typically '/root'
+ARG DOCKER_USER_HOME_ARG
+ENV DOCKER_USER_HOME=${DOCKER_USER_HOME_ARG}
+
 ENV SIMTOREAL_PATH=/workspace/sim_to_real
-ENV DOCKER_USER_HOME=/root
 ENV LANG=C.UTF-8
 # in case get interupted
 ENV DEBIAN_FRONTEND=noninteractive  
@@ -25,9 +32,11 @@ RUN --mount=type=cache,target=/var/cache/apt \
     cmake \
     git \
     libglib2.0-0 \
+    libglib2.0-dev \
     ncurses-term \
     python3 \
     python3-pip \
+    python3-dev \
     wget \
     unzip && \
     apt -y autoremove && apt clean autoclean && \
@@ -42,9 +51,9 @@ RUN cd ${SIMTOREAL_PATH} && \
 # LCM
 ARG LCM_ROOT_PATH=/workspace/
 RUN cd ${LCM_ROOT_PATH} && \
-    wget https://github.com/lcm-proj/lcm/archive/refs/tags/v1.5.0.zip && \
-    unzip lcm-1.5.0.zip && \
-    rm lcm-1.5.0.zip
+    wget -c -O lcm.zip https://github.com/lcm-proj/lcm/archive/refs/tags/v1.5.0.zip && \
+    unzip lcm.zip && \
+    rm lcm.zip
 
 # Build and install LCM core
 RUN mkdir ${LCM_ROOT_PATH}/lcm-1.5.0/build && \
