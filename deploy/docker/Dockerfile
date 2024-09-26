@@ -90,8 +90,8 @@ ARG SIMTOREAL_REPO_URL=https://github.com/XMebius/isaaclab_sim_to_real.git
 RUN git clone ${SIMTOREAL_REPO_URL} ${SIMTOREAL_PATH} && \
     cd ${SIMTOREAL_PATH} && \
     pip install -e . && \
-    pip install toml && \
-    cd ${SIMTOREAL_PATH}/learn/exts/locomotion && \
+    pip install toml 
+RUN cd ${SIMTOREAL_PATH}/learn/exts/locomotion && \
     pip install -e .
 
 # LCM

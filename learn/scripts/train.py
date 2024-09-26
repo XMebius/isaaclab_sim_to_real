@@ -57,6 +57,7 @@ torch.backends.cudnn.allow_tf32 = True
 torch.backends.cudnn.deterministic = False
 torch.backends.cudnn.benchmark = False
 
+RUNS_DIR = os.path.realpath(os.path.join(os.path.dirname(__file__), "../../"))
 
 def main():
     """Train with RSL-RL agent."""
@@ -67,7 +68,7 @@ def main():
     agent_cfg: RslRlOnPolicyRunnerCfg = cli_args.parse_rsl_rl_cfg(args_cli.task, args_cli)
 
     # specify directory for logging experiments
-    log_root_path = os.path.join("runs", agent_cfg.experiment_name)
+    log_root_path = os.path.join(RUNS_DIR, "runs", agent_cfg.experiment_name)
     log_root_path = os.path.abspath(log_root_path)
     print(f"[INFO] Logging experiment in directory: {log_root_path}")
     # specify directory for logging runs: {time-stamp}_{run_name}

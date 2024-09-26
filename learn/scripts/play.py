@@ -48,6 +48,7 @@ from omni.isaac.lab.utils.dict import print_dict
 from omni.isaac.lab_tasks.utils import get_checkpoint_path, parse_env_cfg
 from omni.isaac.lab_tasks.utils.wrappers.rsl_rl import RslRlOnPolicyRunnerCfg, RslRlVecEnvWrapper, export_policy_as_onnx
 
+RUNS_DIR = os.path.realpath(os.path.join(os.path.dirname(__file__), "../../"))
 
 def main():
     """Play with RSL-RL agent."""
@@ -58,7 +59,7 @@ def main():
     agent_cfg: RslRlOnPolicyRunnerCfg = cli_args.parse_rsl_rl_cfg(args_cli.task, args_cli)
 
     # specify directory for logging experiments
-    log_root_path = os.path.join("runs", agent_cfg.experiment_name)
+    log_root_path = os.path.join(RUNS_DIR, "runs", agent_cfg.experiment_name)
     log_root_path = os.path.abspath(log_root_path)
     print(f"[INFO] Loading experiment from directory: {log_root_path}")
     resume_path = get_checkpoint_path(log_root_path, agent_cfg.load_run, agent_cfg.load_checkpoint)
