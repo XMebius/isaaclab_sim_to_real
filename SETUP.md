@@ -1,5 +1,13 @@
-[TOC]
-
+- [Simulation](#simulation)
+  - [Docker Installation](#docker-installation)
+  - [Local Installation](#local-installation)
+    - [Omniverse Launcher](#omniverse-launcher)
+    - [Pip](#pip)
+    - [Verifying Installation](#verifying-installation)
+  - [Train \& Play](#train--play)
+- [Deployment](#deployment)
+  - [Installation](#installation)
+  - [Run](#run)
 
 
 # Simulation

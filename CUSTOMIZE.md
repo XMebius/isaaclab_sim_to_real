@@ -1,4 +1,15 @@
-[TOC]
+- [Training](#training)
+  - [Env Configurations](#env-configurations)
+  - [Add a New Robot](#add-a-new-robot)
+  - [Call The Env](#call-the-env)
+  - [Agent Configurations](#agent-configurations)
+  - [Configuration Output](#configuration-output)
+  - [Test File](#test-file)
+  - [How does training work](#how-does-training-work)
+- [Deployment](#deployment)
+  - [SDK](#sdk)
+  - [LCM Data Types](#lcm-data-types)
+  - [Others](#others)
 
 # Training
 
