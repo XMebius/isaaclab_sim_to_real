@@ -1,7 +1,7 @@
 # Overview
 This project is a 'sim to real' pipeline for training a reinforcement learning agent to walk on a rough environment. The pipeline consists of simulation on **IsaacLab**, deploying the trained model on the real robot. The constructure diagram of deployment framework:
 
-![UML](./resources/UML.png)
+![UML](./resources/assets/UML.png)
 
 
 # System Requirements
