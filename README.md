@@ -1,3 +1,6 @@
+**NOTE: THE DEPLOYMENT PART IS NOT FINISHED.** Getting data from LiDAR or Realsense of Unitree is not well implemented yet.--*2024.9.30*
+
+
 # Overview
 This project is a 'sim to real' pipeline for training a reinforcement learning agent to walk on a rough environment. The pipeline consists of simulation on **IsaacLab**, deploying the trained model on the real robot. The constructure diagram of deployment framework:
 
