@@ -1,4 +1,4 @@
-**NOTE: THE DEPLOYMENT PART IS NOT FINISHED.** Getting data from LiDAR or Realsense of Unitree is not well implemented yet.--*2024.9.30*
+**NOTE: THE DEPLOYMENT PART IS NOT FINISHED.** Getting data from LiDAR or Realsense of Unitree and calibratoon of robot are not well implemented yet.--*2024.9.30*
 
 
 # Overview
