@@ -235,7 +235,6 @@ For Aliengo, we first need to convert its URDF file to a USD file, which can be 
         <limit effort="44" lower="-0.524" upper="3.927" velocity="20"/>
     </joint>
     ```
-```
 
 ## Observation
 
